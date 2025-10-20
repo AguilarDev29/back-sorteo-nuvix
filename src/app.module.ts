@@ -6,23 +6,31 @@ import { StartModule } from './start/start.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 
 @Module({
-  imports: [ParticipantsModule,
-  TypeOrmModule.forRoot({
-    type: "postgres",
-    host: "localhost",
-    port: 5432,
-    username: "postgres",
-    password: "42664539",
-    entities: [Participant, User],
-    database: "sorteo",
-    autoLoadEntities: true,
-    synchronize: true,
-  }),
-  StartModule,
-  AuthModule,
-  UserModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        url: configService.get<string>('DATABASE_URL'),
+        entities: [Participant, User],
+        autoLoadEntities: true,
+        synchronize: false,
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      }),
+    }),
+    ParticipantsModule,
+    StartModule,
+    AuthModule,
+    UserModule],
 })
 export class AppModule {}

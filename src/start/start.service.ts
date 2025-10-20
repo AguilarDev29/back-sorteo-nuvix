@@ -14,9 +14,8 @@ export class StartService {
       return { message: 'No hay participantes para realizar el sorteo.' };
     }
 
-    // Usamos un generador de números aleatorios criptográficamente seguro
     const winnerIndex = randomInt(0, participantes.length);
 
-    return participantes[winnerIndex];
+    return participantes[winnerIndex].dni;
   }
 }

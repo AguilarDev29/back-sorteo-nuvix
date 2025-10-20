@@ -4,6 +4,7 @@ import { UpdateParticipantDto } from './dto/update-participant.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Participant} from "./entities/participant.entity";
 import {Repository} from "typeorm";
+import {TipoParticipanteEnum} from "./entities/tipoParticipante.enum";
 
 @Injectable()
 export class ParticipantsService {
@@ -18,7 +19,7 @@ export class ParticipantsService {
     participant.nombre = createParticipantDto.nombre;
     participant.email = createParticipantDto.email;
     participant.dni = createParticipantDto.dni;
-    participant.tipoParticipante = createParticipantDto.tipoParticipante;
+    participant.tipoParticipante = createParticipantDto.tipoParticipante.toUpperCase() as TipoParticipanteEnum;
 
     return this.participantRepository.save(participant);
   }
