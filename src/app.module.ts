@@ -22,7 +22,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         url: configService.get<string>('DATABASE_URL'),
         entities: [Participant, User],
         autoLoadEntities: true,
-        synchronize: false,
+        synchronize: true,
         ssl: {
           rejectUnauthorized: false,
         },
